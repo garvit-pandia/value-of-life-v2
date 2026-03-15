@@ -2,15 +2,20 @@ export interface Case {
   id: string
   country: string
   countryCode: string
-  year: number
+  year: number | null
+  caseName?: string
   causeOfDeath: string
   occupation: string
   age: number | null
-  gender: "Male" | "Female" | "Not recorded"
+  gender: "Male" | "Female" | "Not recorded" | string
   familySituation: string
   actualPayoutINR: number
+  actualPayoutUSD?: number
+  actualPayoutAUD?: number
+  actualPayoutCAD?: number
+  actualPayoutGBP?: number
   methodologyNote: string
-  sourceURL: string
+  sourceURL: string | null
 }
 
 export interface GuessRecord {

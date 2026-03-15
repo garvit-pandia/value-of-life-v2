@@ -39,6 +39,17 @@ export default function PlayPage() {
   const currentCase = shuffledCasesRef.current[currentIndex]
   const totalCases = shuffledCasesRef.current.length
 
+  const availableSections = currentCase ? [
+    { label: 'Occupation', value: currentCase.occupation },
+    { label: 'Age', value: currentCase.age },
+    { label: 'Gender', value: currentCase.gender },
+    { label: 'Family Status', value: currentCase.familySituation },
+  ].filter(section => {
+    if (section.value === null || section.value === undefined) return false;
+    const s = section.value.toString().toLowerCase();
+    return !s.includes('not recorded') && s !== 'unknown' && s !== 'not applicable';
+  }) : [];
+
   if (!currentCase) {
     return <div className="min-h-screen bg-black" />
   }
@@ -107,31 +118,28 @@ export default function PlayPage() {
           <div className="space-y-10 relative z-10">
             <div>
               <p className="text-[10px] text-gray-500 uppercase tracking-[0.2em] mb-4">
-                {currentCase.country} / {currentCase.year}
+                {currentCase.country}{currentCase.year ? ` / ${currentCase.year}` : ''}
               </p>
               <h2 className="text-2xl md:text-3xl text-white font-serif italic leading-snug">
                 {currentCase.causeOfDeath}
               </h2>
+              {currentCase.caseName && (
+                <p className="text-xs md:text-sm text-gray-400 mt-3 font-light tracking-wide uppercase">
+                  {currentCase.caseName}
+                </p>
+              )}
             </div>
 
-            <div className="grid grid-cols-2 gap-y-6 gap-x-4 border-t border-white/5 pt-8">
-              <div className="space-y-1">
-                <p className="text-[9px] text-gray-500 uppercase tracking-widest">Occupation</p>
-                <p className="text-sm text-gray-300 font-light">{currentCase.occupation}</p>
+            {availableSections.length > 0 && (
+              <div className={`grid ${availableSections.length > 1 ? 'grid-cols-2' : 'grid-cols-1'} gap-y-6 gap-x-4 border-t border-white/5 pt-8`}>
+                {availableSections.map((section) => (
+                  <div key={section.label} className="space-y-1">
+                    <p className="text-[9px] text-gray-500 uppercase tracking-widest">{section.label}</p>
+                    <p className="text-sm text-gray-300 font-light">{section.value}</p>
+                  </div>
+                ))}
               </div>
-              <div className="space-y-1">
-                <p className="text-[9px] text-gray-500 uppercase tracking-widest">Age</p>
-                <p className="text-sm text-gray-300 font-light">{currentCase.age !== null ? currentCase.age : 'Not recorded'}</p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-[9px] text-gray-500 uppercase tracking-widest">Gender</p>
-                <p className="text-sm text-gray-300 font-light">{currentCase.gender}</p>
-              </div>
-              <div className="space-y-1">
-                <p className="text-[9px] text-gray-500 uppercase tracking-widest">Family Status</p>
-                <p className="text-sm text-gray-300 font-light">{currentCase.familySituation}</p>
-              </div>
-            </div>
+            )}
           </div>
         </div>
 
@@ -166,10 +174,15 @@ export default function PlayPage() {
                 <div className="relative group">
                   <span className="absolute left-6 top-1/2 -translate-y-1/2 text-2xl text-gray-600 font-light">₹</span>
                   <input
-                    type="number"
-                    min="0"
+                    type="text"
+                    inputMode="decimal"
                     value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (/^\d*\.?\d*$/.test(val)) {
+                        setInputValue(val);
+                      }
+                    }}
                     placeholder="0.00"
                     className="bg-transparent text-white text-5xl md:text-6xl text-center w-full py-8 border-b-2 border-white/10 outline-none focus:border-white transition-all font-light tracking-tight placeholder:text-white/5 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   />
@@ -215,14 +228,16 @@ export default function PlayPage() {
                     &quot;{currentCase.methodologyNote}&quot;
                   </p>
                 </div>
-                <a 
-                  href={currentCase.sourceURL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block text-[10px] text-gray-600 uppercase tracking-widest hover:text-white transition-colors"
-                >
-                  View Judicial Record →
-                </a>
+                {currentCase.sourceURL && (
+                  <a 
+                    href={currentCase.sourceURL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block text-[10px] text-gray-600 uppercase tracking-widest hover:text-white transition-colors"
+                  >
+                    View Judicial Record →
+                  </a>
+                )}
               </div>
 
               <button
