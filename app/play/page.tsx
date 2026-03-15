@@ -35,10 +35,16 @@ export default function PlayPage() {
     setInitialized(true)
   }, [])
 
-  if (!initialized) return <div className="min-h-screen bg-black" />
+  if (!initialized || !shuffledCasesRef.current.length) {
+    return <div className="min-h-screen bg-black" />
+  }
 
   const currentCase = shuffledCasesRef.current[currentIndex]
   const totalCases = shuffledCasesRef.current.length
+
+  if (!currentCase) {
+    return <div className="min-h-screen bg-black" />
+  }
 
   const handleLockIn = () => {
     if (!inputValue || inputValue === '0' || inputValue === '00') return

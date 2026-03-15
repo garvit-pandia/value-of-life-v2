@@ -34,9 +34,9 @@ export default function ResultPage() {
     })
   }
 
-  if (loading) return <div className="min-h-screen bg-black" />
+  if (loading || !guesses || !pattern) return <div className="min-h-screen bg-black" />
 
-  if (!guesses || guesses.length === 0) {
+  if (guesses.length === 0) {
     return (
       <main className="min-h-screen bg-black text-white flex flex-col items-center justify-center px-6">
         <p className="text-xl mb-6">No session found</p>
