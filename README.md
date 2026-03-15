@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Value of Life (v2)
+
+An interactive, research-driven experience exploring the systemic biases in how legal systems assign monetary value to human lives.
+
+## Overview
+
+"Value of Life" is a professional Next.js 14 application that challenges users to estimate the legal settlements of actual wrongful death court cases. By comparing user guesses with real-world judicial verdicts, the application reveals underlying patterns and disparities in human valuation based on demographics like age, occupation, and gender.
+
+## Key Features
+
+- **Interactive Case Analysis**: Review real-world legal cases with detailed backgrounds.
+- **Instinct vs. Verdict**: Estimate payouts and instantly compare them with court-ordered settlements.
+- **Pattern Recognition**: A core engine analyzes your guessing pattern to identify systemic overestimation or underestimation.
+- **Demographic Bias Detection**: Discover which demographic groups you agree with most closely in terms of valuation.
+- **Premium Aesthetics**: A minimalist, high-contrast design using glassmorphism and fluid animations.
+
+## Tech Stack
+
+- **Framework**: Next.js 15.2.1 (App Router)
+- **Styling**: Tailwind CSS 3.4
+- **Language**: TypeScript
+- **State Management**: React Hooks & Session Storage
 
 ## Getting Started
 
-First, run the development server:
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/garvit-pandia/value-of-life-v2.git
+   ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. **Run the development server**:
+   ```bash
+   npm run dev
+   ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+4. **Navigate to**: `http://localhost:3000`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## License
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is for research and educational purposes.

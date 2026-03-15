@@ -9,7 +9,6 @@ import { formatINR, parseLakhCrore } from '@/lib/currencyUtils'
 export default function PlayPage() {
   const router = useRouter()
   
-  // State
   const [currentIndex, setCurrentIndex] = useState(0)
   const [gamePhase, setGamePhase] = useState<'guessing' | 'revealed'>('guessing')
   const [inputValue, setInputValue] = useState('')
@@ -17,10 +16,8 @@ export default function PlayPage() {
   const [guesses, setGuesses] = useState<GuessRecord[]>([])
   const [initialized, setInitialized] = useState(false)
   
-  // Refs
   const shuffledCasesRef = useRef<Case[]>([])
 
-  // Selection logic for Shuffle on mount
   useEffect(() => {
     const shuffle = (array: Case[]) => {
       const shuffled = [...array]
@@ -91,129 +88,152 @@ export default function PlayPage() {
   }
 
   return (
-    <main className="min-h-screen bg-black text-white px-6 py-8 max-w-md mx-auto flex flex-col">
-      {/* Header */}
-      <div className="mb-8">
-        <p className="text-xs text-gray-500 uppercase tracking-widest">
-          Case {currentIndex + 1} of {totalCases}
-        </p>
-      </div>
-
-      {/* Case Card */}
-      <div className="flex-1">
-        <p className="text-xs text-gray-500">
-          {currentCase.country}, {currentCase.year}
-        </p>
-        <h2 className="text-xl text-white font-semibold mt-4 leading-tight">
-          {currentCase.causeOfDeath}
-        </h2>
-
-        <div className="mt-6 space-y-2">
-          <p className="text-sm text-gray-400">
-            <span className="text-gray-500 uppercase text-[10px] tracking-wider mr-2">Occupation:</span>
-            {currentCase.occupation}
-          </p>
-          <p className="text-sm text-gray-400">
-            <span className="text-gray-500 uppercase text-[10px] tracking-wider mr-2">Age:</span>
-            {currentCase.age !== null ? currentCase.age : 'Not recorded'}
-          </p>
-          <p className="text-sm text-gray-400">
-            <span className="text-gray-500 uppercase text-[10px] tracking-wider mr-2">Gender:</span>
-            {currentCase.gender}
-          </p>
-          <p className="text-sm text-gray-400">
-            <span className="text-gray-500 uppercase text-[10px] tracking-wider mr-2">Family:</span>
-            {currentCase.familySituation}
-          </p>
+    <main className="min-h-screen bg-black text-white px-6 py-12 flex flex-col items-center">
+      <div className="w-full max-w-lg animate-reveal">
+        {/* Progress Header */}
+        <div className="flex justify-between items-center mb-12 border-b border-white/10 pb-4">
+          <div className="text-[10px] text-gray-400 tracking-[0.2em] uppercase font-light">
+            Evidence File / 0{currentIndex + 1}
+          </div>
+          <div className="text-[10px] text-gray-500 uppercase tracking-widest font-light">
+            0{currentIndex + 1} — 0{totalCases}
+          </div>
         </div>
-      </div>
 
-      {/* Action Zone */}
-      <div className="mt-12">
-        {gamePhase === 'guessing' ? (
-          <div className="space-y-6">
+        {/* Case Info Card */}
+        <div className="glass-card rounded-xl p-8 md:p-10 relative overflow-hidden group hover:border-white/20 transition-all duration-700">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 blur-[40px] rounded-full group-hover:bg-white/10 transition-colors duration-700"></div>
+          
+          <div className="space-y-10 relative z-10">
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-widest mb-4">
-                What was the legal payout?
+              <p className="text-[10px] text-gray-500 uppercase tracking-[0.2em] mb-4">
+                {currentCase.country} / {currentCase.year}
               </p>
-              <div className="flex gap-2 mb-4">
-                <button
-                  onClick={() => setInputUnit('lakh')}
-                  className={`min-h-[48px] flex-1 text-sm font-medium border transition-colors ${
-                    inputUnit === 'lakh' ? 'bg-white text-black border-white' : 'bg-transparent border-gray-600 text-white hover:border-gray-400'
-                  }`}
-                >
-                  IN LAKHS
-                </button>
-                <button
-                  onClick={() => setInputUnit('crore')}
-                  className={`min-h-[48px] flex-1 text-sm font-medium border transition-colors ${
-                    inputUnit === 'crore' ? 'bg-white text-black border-white' : 'bg-transparent border-gray-600 text-white hover:border-gray-400'
-                  }`}
-                >
-                  IN CRORES
-                </button>
-              </div>
-              <input
-                type="number"
-                min="0"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                placeholder="Enter amount"
-                className="bg-gray-900 text-white text-xl text-center w-full p-4 rounded-none border border-gray-700 outline-none focus:border-gray-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-              />
-            </div>
-            <button
-              onClick={handleLockIn}
-              disabled={!inputValue || inputValue === '0' || inputValue === '00'}
-              className={`full-width min-h-[56px] w-full bg-white text-black font-bold text-lg transition-opacity ${
-                (!inputValue || inputValue === '0' || inputValue === '00') ? 'opacity-30 cursor-not-allowed' : 'opacity-100 hover:bg-gray-200'
-              }`}
-            >
-              Lock In
-            </button>
-          </div>
-        ) : (
-          <div className="space-y-6">
-            <div className="space-y-4">
-              <div>
-                <p className="text-xs text-gray-500 uppercase tracking-widest mb-1">Your Guess</p>
-                <p className={getGuessColor() + " text-2xl font-bold"}>
-                  {formatINR(latestGuess.guessedAmount)}
-                </p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-500 uppercase tracking-widest mb-1">Actual Settlement</p>
-                <p className="text-2xl font-bold text-white">
-                  {currentCase.actualPayoutINR === 0 
-                    ? "₹0 — The court awarded nothing." 
-                    : formatINR(currentCase.actualPayoutINR)}
-                </p>
-              </div>
+              <h2 className="text-2xl md:text-3xl text-white font-serif italic leading-snug">
+                {currentCase.causeOfDeath}
+              </h2>
             </div>
 
-            <div className="pt-6 border-t border-gray-800">
-              <p className="text-sm text-gray-400 italic leading-relaxed">
-                &quot;{currentCase.methodologyNote}&quot;
-              </p>
-              <a 
-                href={currentCase.sourceURL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block text-xs text-gray-600 underline mt-4 hover:text-gray-400 transition-colors"
+            <div className="grid grid-cols-2 gap-y-6 gap-x-4 border-t border-white/5 pt-8">
+              <div className="space-y-1">
+                <p className="text-[9px] text-gray-500 uppercase tracking-widest">Occupation</p>
+                <p className="text-sm text-gray-300 font-light">{currentCase.occupation}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-[9px] text-gray-500 uppercase tracking-widest">Age</p>
+                <p className="text-sm text-gray-300 font-light">{currentCase.age !== null ? currentCase.age : 'Not recorded'}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-[9px] text-gray-500 uppercase tracking-widest">Gender</p>
+                <p className="text-sm text-gray-300 font-light">{currentCase.gender}</p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-[9px] text-gray-500 uppercase tracking-widest">Family Status</p>
+                <p className="text-sm text-gray-300 font-light">{currentCase.familySituation}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Zone */}
+        <div className="mt-12 space-y-8">
+          {gamePhase === 'guessing' ? (
+            <div className="space-y-8 animate-reveal" style={{ animationDelay: '0.2s' }}>
+              <div>
+                <p className="text-[10px] text-gray-500 uppercase tracking-[0.3em] text-center mb-6">
+                  Estimate the value
+                </p>
+                
+                <div className="flex p-1 bg-white/5 border border-white/10 rounded-lg mb-6 max-w-xs mx-auto">
+                  <button
+                    onClick={() => setInputUnit('lakh')}
+                    className={`h-10 flex-1 text-[10px] tracking-widest transition-all rounded-md ${
+                      inputUnit === 'lakh' ? 'bg-white text-black font-semibold' : 'text-gray-400 hover:text-white'
+                    }`}
+                  >
+                    LAKHS
+                  </button>
+                  <button
+                    onClick={() => setInputUnit('crore')}
+                    className={`h-10 flex-1 text-[10px] tracking-widest transition-all rounded-md ${
+                      inputUnit === 'crore' ? 'bg-white text-black font-semibold' : 'text-gray-400 hover:text-white'
+                    }`}
+                  >
+                    CRORES
+                  </button>
+                </div>
+
+                <div className="relative group">
+                  <span className="absolute left-6 top-1/2 -translate-y-1/2 text-2xl text-gray-600 font-light">₹</span>
+                  <input
+                    type="number"
+                    min="0"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    placeholder="0.00"
+                    className="bg-transparent text-white text-5xl md:text-6xl text-center w-full py-8 border-b-2 border-white/10 outline-none focus:border-white transition-all font-light tracking-tight placeholder:text-white/5 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  />
+                </div>
+              </div>
+
+              <button
+                onClick={handleLockIn}
+                disabled={!inputValue || inputValue === '0' || inputValue === '00'}
+                className={`w-full py-6 bg-white text-black text-sm uppercase tracking-[0.4em] font-semibold transition-all duration-500 ${
+                  (!inputValue || inputValue === '0' || inputValue === '00') 
+                    ? 'opacity-20 cursor-not-allowed' 
+                    : 'opacity-100 hover:bg-gray-200 hover:tracking-[0.5em]'
+                }`}
               >
-                Source
-              </a>
+                Declare Verdict
+              </button>
             </div>
+          ) : (
+            <div className="space-y-10 animate-reveal">
+              <div className="flex justify-around items-center border-b border-white/10 pb-10">
+                <div className="text-center">
+                  <p className="text-[9px] text-gray-500 uppercase tracking-widest mb-2">Estimation</p>
+                  <p className={getGuessColor() + " text-3xl md:text-4xl font-light tracking-tight"}>
+                    {formatINR(latestGuess.guessedAmount)}
+                  </p>
+                </div>
+                <div className="w-px h-12 bg-white/10"></div>
+                <div className="text-center">
+                  <p className="text-[9px] text-gray-500 uppercase tracking-widest mb-2">Verdict</p>
+                  <p className="text-3xl md:text-4xl font-light tracking-tight text-white">
+                    {currentCase.actualPayoutINR === 0 
+                      ? "₹0" 
+                      : formatINR(currentCase.actualPayoutINR)}
+                  </p>
+                </div>
+              </div>
 
-            <button
-              onClick={handleNext}
-              className="min-h-[56px] w-full bg-white text-black font-bold text-lg mt-8 hover:bg-gray-200 transition-colors"
-            >
-              {currentIndex < totalCases - 1 ? 'Next Case' : 'See Your Pattern'}
-            </button>
-          </div>
-        )}
+              <div className="space-y-6">
+                <div className="relative">
+                  <div className="absolute left-0 top-0 w-1 h-full bg-white/20"></div>
+                  <p className="pl-6 text-sm text-gray-400 italic leading-relaxed font-serif uppercase tracking-tight">
+                    &quot;{currentCase.methodologyNote}&quot;
+                  </p>
+                </div>
+                <a 
+                  href={currentCase.sourceURL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block text-[10px] text-gray-600 uppercase tracking-widest hover:text-white transition-colors"
+                >
+                  View Judicial Record →
+                </a>
+              </div>
+
+              <button
+                onClick={handleNext}
+                className="w-full py-6 border border-white/20 text-white text-sm uppercase tracking-[0.4em] transition-all duration-500 hover:bg-white hover:text-black hover:tracking-[0.5em]"
+              >
+                {currentIndex < totalCases - 1 ? 'Next Analysis' : 'Final Evaluation'}
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </main>
   )
