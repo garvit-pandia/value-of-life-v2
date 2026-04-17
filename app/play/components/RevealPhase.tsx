@@ -69,7 +69,6 @@ export function RevealPhase({
       <button
         onClick={onNext}
         className="w-full py-4 border-2 border-parchment text-parchment font-mono font-bold text-sm uppercase tracking-[0.4em] transition-all duration-300 hover:bg-parchment hover:text-[#050505]"
-        autoFocus
       >
         {!isLast ? 'Proceed to Next File' : 'Initialize Final Report'}
       </button>
