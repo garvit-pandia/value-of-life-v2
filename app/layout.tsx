@@ -25,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="bg-[#050505] text-parchment">
+    <html lang="en" className="bg-[#050505] text-parchment" suppressHydrationWarning>
       <body
         className={`${playfair.variable} ${jetbrainsMono.variable} font-sans antialiased bg-[#050505] text-parchment relative overflow-x-hidden selection:bg-parchment selection:text-black`}
       >
