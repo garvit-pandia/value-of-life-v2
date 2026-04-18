@@ -8,6 +8,8 @@ interface AudioContextType {
   isUnlocked: boolean;
   unlockAudio: () => void;
   playClick: () => void;
+  playHover: () => void;
+  playMechanicalClick: () => void;
   setTension: (level: number) => void;
 }
 
@@ -30,6 +32,18 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  const playHover = () => {
+    if (isUnlocked) {
+      audioEngine.playMechanicalHover();
+    }
+  }
+
+  const playMechanicalClick = () => {
+    if (isUnlocked) {
+      audioEngine.playMechanicalClick();
+    }
+  }
+
   const setTension = (level: number) => {
     if (isUnlocked) {
       audioEngine.setTension(level);
@@ -44,7 +58,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   return (
-    <AudioContext.Provider value={{ engine: audioEngine, isUnlocked, unlockAudio, playClick, setTension }}>
+    <AudioContext.Provider value={{ engine: audioEngine, isUnlocked, unlockAudio, playClick, playHover, playMechanicalClick, setTension }}>
       {children}
     </AudioContext.Provider>
   )

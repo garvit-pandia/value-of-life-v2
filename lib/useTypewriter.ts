@@ -17,8 +17,8 @@ export function useTypewriter(targetString: string, speedMs: number = 30, startD
 
     const startTyping = () => {
       const typeChar = () => {
-        if (index < targetString.length) {
-          setDisplayText((prev) => prev + targetString.charAt(index));
+        if (index <= targetString.length) {
+          setDisplayText(targetString.substring(0, index));
           index++;
           // Add slight programmatic randomness to typing speed to simulate actual human/teletype speed
           timeoutId = setTimeout(typeChar, speedMs + (Math.random() * 30)); 

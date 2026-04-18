@@ -110,6 +110,72 @@ export class AudioEngine {
     clickOsc.start();
     clickOsc.stop(this.ctx.currentTime + 0.06);
   }
+  // UI Hover blip (mechanical 80s hardware)
+  public playMechanicalHover() {
+    if (!this.ctx || !this.isInitialized) return;
+    
+    const hoverOsc = this.ctx.createOscillator();
+    const hoverGain = this.ctx.createGain();
+
+    hoverOsc.type = 'square';
+    hoverOsc.frequency.setValueAtTime(100, this.ctx.currentTime);
+    
+    hoverGain.gain.setValueAtTime(0.02, this.ctx.currentTime);
+    hoverGain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.05);
+
+    hoverOsc.connect(hoverGain);
+    hoverGain.connect(this.ctx.destination);
+
+    hoverOsc.start();
+    hoverOsc.stop(this.ctx.currentTime + 0.05);
+  }
+
+  // UI Violent Mechanical Click
+  public playMechanicalClick() {
+    if (!this.ctx || !this.isInitialized) return;
+    
+    // Low Thump
+    const thumpOsc = this.ctx.createOscillator();
+    const thumpGain = this.ctx.createGain();
+    
+    thumpOsc.type = 'sine';
+    thumpOsc.frequency.setValueAtTime(150, this.ctx.currentTime);
+    thumpOsc.frequency.exponentialRampToValueAtTime(30, this.ctx.currentTime + 0.1);
+    
+    thumpGain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+    thumpGain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
+    
+    thumpOsc.connect(thumpGain);
+    thumpGain.connect(this.ctx.destination);
+    
+    thumpOsc.start();
+    thumpOsc.stop(this.ctx.currentTime + 0.1);
+
+    // Noise Burst
+    const bufferSize = this.ctx.sampleRate * 0.1; 
+    const noiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+    const output = noiseBuffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      output[i] = Math.random() * 2 - 1;
+    }
+    
+    const noiseSource = this.ctx.createBufferSource();
+    noiseSource.buffer = noiseBuffer;
+    
+    const noiseFilter = this.ctx.createBiquadFilter();
+    noiseFilter.type = 'lowpass';
+    noiseFilter.frequency.value = 1000;
+    
+    const noiseGain = this.ctx.createGain();
+    noiseGain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+    noiseGain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
+    
+    noiseSource.connect(noiseFilter);
+    noiseFilter.connect(noiseGain);
+    noiseGain.connect(this.ctx.destination);
+    
+    noiseSource.start();
+  }
 }
 
 // Export singleton instance
