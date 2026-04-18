@@ -23,7 +23,7 @@ export function CaseCard({ currentCase }: { currentCase: Case }) {
     <div className="dossier-card p-5 md:p-6 relative">
       <div className="space-y-6 relative z-10">
         <div className="border-b-2 border-parchment/60 pb-4 border-dashed">
-          <p className="font-mono text-[10px] text-parchment/70 uppercase tracking-[0.2em] mb-1 bg-[#050505] inline-block px-1 -ml-1 border-l-2 border-stamp-red">
+          <p className="font-mono text-xs md:text-sm font-bold text-parchment/90 uppercase tracking-widest mb-1 bg-[#050505] inline-block px-2 py-1 -ml-1 border-l-4 border-stamp-red">
             JURISDICTION: {currentCase.country}{currentCase.year ? ` / YEAR: ${currentCase.year}` : ''}
           </p>
           <h2 className="text-xl md:text-2xl text-parchment font-serif italic leading-snug font-bold mt-1 uppercase">
