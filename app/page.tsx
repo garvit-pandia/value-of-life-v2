@@ -24,7 +24,8 @@ export default function Home() {
   const { displayText: subText, isFinished: typewriterDone } = useTypewriter(
     "Estimate the legal settlement of actual court cases.\nDiscover the systemic biases in human valuation.", 
     15, // Ultra fast typing
-    0
+    0,
+    startTypewriter
   );
 
   // Phase 3: Button Mount

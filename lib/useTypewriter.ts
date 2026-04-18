@@ -1,10 +1,17 @@
 import { useState, useEffect } from 'react';
 
-export function useTypewriter(targetString: string, speedMs: number = 30, startDelayMs: number = 0) {
+export function useTypewriter(targetString: string, speedMs: number = 30, startDelayMs: number = 0, isReady: boolean = true) {
   const [displayText, setDisplayText] = useState('');
   const [isFinished, setIsFinished] = useState(false);
 
   useEffect(() => {
+    if (!isReady) {
+      // Reset if not ready
+      setDisplayText('');
+      setIsFinished(false);
+      return; 
+    }
+
     let index = 0;
     let timeoutId: NodeJS.Timeout;
 
@@ -30,7 +37,7 @@ export function useTypewriter(targetString: string, speedMs: number = 30, startD
       clearTimeout(initialDelay);
       clearTimeout(timeoutId);
     };
-  }, [targetString, speedMs, startDelayMs]);
+  }, [targetString, speedMs, startDelayMs, isReady]);
 
   return { displayText, isFinished };
 }
