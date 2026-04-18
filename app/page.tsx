@@ -10,6 +10,11 @@ import { useTypewriter } from "@/lib/useTypewriter";
 export default function Home() {
   const { resetGame } = useGame();
   const { unlockAudio } = useAudio();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Phase 1: Cryptographic Scramble of the Main Title
   const { displayText: titleText, isFinished: scrambleDone } = useScramble("A LIFE, REDUCED\nTO A NUMBER.", 1500, 200);
@@ -51,25 +56,25 @@ export default function Home() {
       {/* CRT Scanline Overlay */}
       <div className="crt-overlay"></div>
 
-      <div className={`border border-parchment/30 p-1 md:p-2 w-full max-w-3xl relative z-10 transition-opacity duration-1000 ${scrambleDone ? 'opacity-100' : 'opacity-80'}`}>
-        <div className="border border-parchment/50 p-6 md:p-12 flex flex-col items-center min-h-[450px] bg-[#050505] relative overflow-hidden">
+      <div className={`border border-parchment/30 p-1 md:p-2 w-full max-w-2xl relative z-10 transition-opacity duration-1000 ${scrambleDone ? 'opacity-100' : 'opacity-80'}`}>
+        <div className="border border-parchment/50 p-6 md:p-10 flex flex-col items-center min-h-[380px] bg-[#050505] relative overflow-hidden">
           
           {/* Header Metadata */}
-          <div className="w-full flex justify-between items-start text-xs font-mono text-parchment/60 uppercase tracking-widest border-b border-parchment/30 pb-4">
+          <div className="w-full flex justify-between items-start text-[10px] md:text-xs font-mono text-parchment/50 uppercase tracking-widest border-b border-parchment/30 pb-3">
             <span>[Dept of Actuarial Ethics]</span>
             <span>File: Vol-II-9A</span>
           </div>
 
-          <div className="flex flex-col gap-8 py-8 flex-grow justify-center w-full">
+          <div className="flex flex-col gap-6 py-6 flex-grow justify-center w-full">
             {/* Phase 1: Scramble Title */}
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-serif font-bold italic tracking-tight text-parchment whitespace-pre-line leading-tight">
-              {titleText}
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-serif font-bold italic tracking-tight text-parchment whitespace-pre-line leading-tight">
+              {mounted ? titleText : "A LIFE, REDUCED\nTO A NUMBER."}
             </h1>
             
-            {/* Phase 2: Teletype Subtext Container (fixed height to prevent layout shift) */}
-            <div className="h-16 md:h-20 flex items-center justify-center w-full">
+            {/* Phase 2: Teletype Subtext Container */}
+            <div className="h-12 md:h-16 flex items-center justify-center w-full">
               {startTypewriter && (
-                <p className="font-mono text-parchment text-sm md:text-base leading-relaxed bg-parchment/10 inline-block px-4 py-2 mx-auto uppercase tracking-wide whitespace-pre-line text-left max-w-lg">
+                <p className="font-mono text-parchment text-xs md:text-sm leading-relaxed bg-parchment/10 inline-block px-4 py-2 mx-auto uppercase tracking-wider whitespace-pre-line text-left max-w-lg">
                   {subText}
                   {!typewriterDone && <span className="animate-pulse bg-parchment w-2 h-4 inline-block ml-1 align-middle"></span>}
                 </p>
