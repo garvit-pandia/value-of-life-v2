@@ -31,7 +31,6 @@ export default function Home() {
   // Phase 3: Button Mount
   const [showButton, setShowButton] = useState(false);
 
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     if (scrambleDone) {
@@ -55,28 +54,12 @@ export default function Home() {
     resetGame();
   };
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    setMousePos({ x: e.clientX, y: e.clientY });
-  };
+
 
   return (
     <main 
-      onMouseMove={handleMouseMove}
       className="flex flex-col items-center justify-center min-h-screen bg-[#050505] px-4 text-center select-none relative overflow-hidden"
     >
-      {/* Background Masked Chaos Layer (Flashlight Effect) */}
-      <div 
-        className="absolute inset-0 z-0 pointer-events-none opacity-40 transition-opacity duration-300 flex flex-wrap content-start p-12 overflow-hidden"
-        style={{
-          maskImage: `radial-gradient(circle 350px at ${mousePos.x}px ${mousePos.y}px, black 30%, transparent 80%)`,
-          WebkitMaskImage: `radial-gradient(circle 350px at ${mousePos.x}px ${mousePos.y}px, black 30%, transparent 80%)`
-        }}
-      >
-        <div className="text-stamp-red font-mono font-bold text-4xl -rotate-12 opacity-50 absolute top-24 left-24">[TOP SECRET]</div>
-        <div className="text-parchment/30 font-mono text-xs w-64 absolute top-12 right-12 whitespace-pre-wrap">{"0x8F92 0x1A2B 0xCC44\n0x9921 0x00A1 0xFF22\n".repeat(10)}</div>
-        <div className="text-stamp-red font-serif italic text-6xl mt-48 absolute right-32 opacity-40 border-4 border-stamp-red p-2 uppercase">Classified</div>
-        <div className="absolute bottom-32 left-32 text-parchment/20 font-mono text-xl tracking-widest leading-loose">{"∀x(Px \u2192 Qx) \n \u2227 \n \u2203y(Ry \u2228 Sy) \n \u2211(n=1 \u2192 \u221E) : X"}</div>
-      </div>
 
       {/* CRT Scanline Overlay */}
       <div className="crt-overlay"></div>

@@ -3,7 +3,6 @@ import { Playfair_Display, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { GameProvider } from "@/lib/GameContext";
 import { AudioProvider } from "@/lib/AudioProvider";
-import InkCursor from "@/app/components/InkCursor";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -34,7 +33,6 @@ export default function RootLayout({
           <GameProvider>
             {/* CRT / Document Noise Overlay */}
             <div className="fixed inset-0 pointer-events-none z-50 opacity-[0.06] noise-bg mix-blend-overlay"></div>
-            <InkCursor />
             {children}
           </GameProvider>
         </AudioProvider>
